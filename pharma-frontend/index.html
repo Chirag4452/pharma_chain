@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharma Supply Chain</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.5/web3.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Pharmaceutical Supply Chain</h1>
+
+    <div>
+        <h3>Register a Drug</h3>
+        <input type="number" id="batchNumber" placeholder="Batch Number">
+        <input type="text" id="name" placeholder="Drug Name">
+        <input type="text" id="manufacturer" placeholder="Manufacturer Address">
+        <button onclick="registerDrug()">Register Drug</button>
+    </div>
+
+    <div>
+        <h3>Get Drug Details</h3>
+        <input type="number" id="searchBatchNumber" placeholder="Enter Batch Number">
+        <button onclick="getDrugDetails()">Get Details</button>
+        <p id="drugDetails"></p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
