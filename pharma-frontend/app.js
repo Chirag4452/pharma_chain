@@ -161,30 +161,46 @@ async function initWeb3() {
 
 // Register a Drug
 async function registerDrug() {
-    const batchNumber = document.getElementById("batchNumber").value;
-    const name = document.getElementById("name").value;
-    const manufacturer = document.getElementById("manufacturer").value;
+  const batchNumber = document.getElementById("batchNumber").value;
+  const name = document.getElementById("name").value;
+  const manufacturer = document.getElementById("manufacturer").value;
 
-    try {
-        const accounts = await web3.eth.getAccounts();
-        await contract.methods.registerDrug(batchNumber, name, manufacturer).send({ from: accounts[0] });
-        alert("Drug registered successfully!");
-    } catch (error) {
-        console.error("Error registering drug:", error);
-    }
+  if (!batchNumber || !name || !manufacturer) {
+      alert("Please enter all details.");
+      return;
+  }
+
+  try {
+      const accounts = await web3.eth.getAccounts();
+      await contract.methods.registerDrug(batchNumber, name).send({ from: accounts[0] });
+      alert("Drug registered successfully!");
+  } catch (error) {
+      console.error("Error registering drug:", error);
+      alert("Transaction failed. Check the console for details.");
+  }
 }
+
 
 // Get Drug Details
 async function getDrugDetails() {
-    const batchNumber = document.getElementById("searchBatchNumber").value;
+  const batchNumber = document.getElementById("searchBatchNumber").value;
 
-    try {
-        const drug = await contract.methods.getDrug(batchNumber).call();
-        document.getElementById("drugDetails").innerText =
-            `Name: ${drug[0]}, Manufacturer: ${drug[1]}, Verified: ${drug[2]}`;
-    } catch (error) {
-        console.error("Error fetching drug details:", error);
-    }
+  if (!batchNumber) {
+      alert("Please enter a batch number.");
+      return;
+  }
+
+  try {
+      const drug = await contract.methods.getDrug(batchNumber).call();
+      console.log("Fetched Drug Details:", drug);
+      
+      document.getElementById("drugDetails").innerText =
+          `Name: ${drug[0]}, Manufacturer: ${drug[1]}, Verified: ${drug[2]}`;
+  } catch (error) {
+      console.error("Error fetching drug details:", error);
+      alert("Failed to fetch drug details. Check the console for errors.");
+  }
 }
+
 
 window.onload = initWeb3;
