@@ -166,16 +166,43 @@ input:focus {
     justify-content: space-between;
     align-items: center;
     padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .detail-label {
     font-weight: 500;
     color: #666;
+    min-width: 160px;
 }
 
 .detail-value {
     color: #333;
     font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+    max-width: 60%;
+}
+
+#manufacturerAddress {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    background-color: #f5f5f5;
+    padding: 3px 6px;
+    border-radius: 4px;
+    word-break: break-all;
+}
+
+.fraud-status-row {
+    background-color: #f9f9f9;
+    padding: 12px 8px;
+    border-radius: 6px;
+    margin: 5px 0;
+    border-bottom: none;
+}
+
+#registrationTime {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
 }
 
 /* Add a nice animation when showing results */

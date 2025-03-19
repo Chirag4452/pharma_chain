@@ -272,6 +272,11 @@ async function registerDrug() {
       });
 
       const accounts = await web3.eth.getAccounts();
+      
+      // Store manufacturer name in localStorage
+      const manufacturerKey = `manufacturer_${batchNumber}`;
+      localStorage.setItem(manufacturerKey, manufacturer);
+      
       await contract.methods.registerDrug(batchNumber, name).send({ from: accounts[0] });
 
       if (fraudCheck.is_fraud) {
@@ -317,11 +322,34 @@ async function getDrugDetails() {
       const drug = await contract.methods.getDrug(batchNumber).call();
       console.log("Fetched Drug Details:", drug);
       
+      // Convert UNIX timestamp to IST (UTC+5:30)
+      const timestamp = parseInt(drug[4]);
+      const date = new Date(timestamp * 1000);
+      
+      // Add 5 hours and 30 minutes for IST
+      date.setHours(date.getHours() + 5);
+      date.setMinutes(date.getMinutes() + 30);
+      
+      const istTime = date.toLocaleString('en-IN', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+      });
+      
+      // Get manufacturer name from localStorage if available
+      const manufacturerKey = `manufacturer_${batchNumber}`;
+      const manufacturerName = localStorage.getItem(manufacturerKey) || "Unknown";
+      
       // Update the drug details in the new structure
       document.getElementById("drugName").textContent = drug[0];
-      document.getElementById("drugManufacturer").textContent = drug[1];
-      document.getElementById("drugVerification").textContent = drug[2] ? "✓ Verified" : "⚠ Not Verified";
-      document.getElementById("drugVerification").style.color = drug[2] ? "#28a745" : "#dc3545";
+      
+      // Show both manufacturer name and blockchain address
+      document.getElementById("manufacturerName").textContent = manufacturerName;
+      document.getElementById("manufacturerAddress").textContent = drug[1];
       
       // Add fraud detection status
       const fraudStatus = document.getElementById("fraudStatus");
@@ -332,6 +360,9 @@ async function getDrugDetails() {
           fraudStatus.textContent = "✓ No Fraud Detected";
           fraudStatus.style.color = "#28a745";
       }
+      
+      // Update registration time with IST
+      document.getElementById("registrationTime").textContent = istTime + " (IST)";
       
       // Show the details container
       document.getElementById("drugDetails").style.display = "block";
